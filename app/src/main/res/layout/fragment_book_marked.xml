@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    tools:context=".MainFragments.myFiles">
-
+    tools:context=".MainFragments.bookMarked">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -24,14 +22,12 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
     </androidx.appcompat.widget.Toolbar>
-
     <ImageButton
         android:id="@+id/bt_menu"
         android:layout_width="35dp"
@@ -44,18 +40,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/toolBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         app:tabInlineLabel="true"
+        app:tabIconTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        app:tabIconTint="@null"
         app:tabIndicator="@drawable/tab_back"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="@null"
@@ -63,8 +57,7 @@
         app:tabIndicatorGravity="stretch"
         app:tabMode="fixed"
         app:tabSelectedTextAppearance="@color/purple_200"
-        app:tabTextColor="@color/white"
-        app:tabUnboundedRipple="false" />
+        app:tabTextColor="@color/white" />
 
     <TextView
         android:id="@+id/textView"
@@ -103,4 +96,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/toolBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

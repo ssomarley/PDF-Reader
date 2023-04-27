@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <gradient android:startColor="#BB68D1"
-                android:endColor="#7EE8F6"/>
+            <gradient android:startColor="#FFEB3B"
+                android:endColor="#FF5722"/>
         </shape>
 
     </item>
-    <item android:drawable="@drawable/ic_baseline_ac_unit_24"
+    <item android:drawable="@drawable/baseline_add_24"
         android:top="15sp"
         android:right="15sp"
         android:left="15sp"

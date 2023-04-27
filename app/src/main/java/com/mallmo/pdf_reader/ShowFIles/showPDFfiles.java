@@ -1,39 +1,44 @@
-package com.mallmo.pdf_reader;
+package com.mallmo.pdf_reader.ShowFIles;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.mallmo.pdf_reader.MainActivity;
+import com.mallmo.pdf_reader.MainFragments.bookMarked;
+import com.mallmo.pdf_reader.MainFragments.myFiles;
+import com.mallmo.pdf_reader.R;
 import com.mallmo.pdf_reader.databinding.FragmentPdfShowBinding;
 
 import java.io.File;
-import java.util.zip.Inflater;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link pdfShow#newInstance} factory method to
+ * Use the {@link showPDFfiles#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class pdfShow extends Fragment {
+public class showPDFfiles extends Fragment {
     FragmentPdfShowBinding binding;
     private PDFView pdfView;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-
+    public static final String FLAG_KEY="myFlagKey";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    private int mFlag;
 
-
-    public pdfShow() {
+    public showPDFfiles() {
         // Required empty public constructor
     }
 
@@ -46,11 +51,11 @@ public class pdfShow extends Fragment {
      * @return A new instance of fragment pdfShow.
      */
     // TODO: Rename and change types and number of parameters
-    public static pdfShow newInstance(String param1) {
-        pdfShow fragment = new pdfShow();
+    public static showPDFfiles newInstance(String param1, int flag) {
+        showPDFfiles fragment = new showPDFfiles();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-
+        args.putInt(FLAG_KEY,flag);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,7 +65,7 @@ public class pdfShow extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-
+            mFlag=getArguments().getInt(FLAG_KEY);
         }
     }
 
@@ -71,16 +76,39 @@ public class pdfShow extends Fragment {
         binding= FragmentPdfShowBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
         pdfView=view.findViewById(binding.pdfViewr.getId());
+        requireActivity()
+                .getOnBackPressedDispatcher()
+                .addCallback(new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+
+                        if (mFlag== MainActivity.MY_FILES_STATE){
+                            myFiles fragment=new myFiles();
+                            FragmentTransaction transaction=getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.setReorderingAllowed(true);
+                            transaction.replace(R.id.frame,fragment);
+                            transaction.commit();
+                        } else if (mFlag==MainActivity.MY_BOOKMARKED_STATE) {
+                            bookMarked fragment=new bookMarked();
+                            FragmentTransaction transaction=getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.setReorderingAllowed(true);
+                            transaction.replace(R.id.frame,fragment);
+                            transaction.commit();
+                        }
+                    }
+                });
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (mParam1 !=null){
+            File pdfFile=new File(mParam1);
+            pdfView.fromFile(pdfFile)
+                    .load();
+        }
 
-        File pdfFile=new File(mParam1);
-        pdfView.fromFile(pdfFile)
-                .load();
     }
 
     @Override
@@ -88,4 +116,5 @@ public class pdfShow extends Fragment {
         super.onDestroy();
         binding=null;
     }
+
 }

@@ -1,39 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginEnd="6dp"
+    android:layout_marginStart="6dp"
     app:cardElevation="8dp"
+
     android:id="@+id/cardView"
     app:cardCornerRadius="10dp">
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="vertical">
+
+        android:background="@color/white"
+        >
+
         <ImageView
-            android:id="@+id/pdf_img"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:src="@drawable/pdf_icon"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            />
+
+            android:layout_margin="6dp"
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/p"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/txt_pdfName"
-            android:layout_width="match_parent"
-
-            android:layout_height="40dp"
-            android:gravity="center"
-
-
-            android:text="PDF Name"
-            android:textColor="@color/black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:singleLine="true"
+            android:text="hhhh"
+            android:textColor="@color/recycle_row"
             android:textSize="15sp"
-            android:textStyle="italic|bold" />
-        
-    </LinearLayout>
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toStartOf="@+id/bt_bookmarks"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:text="TextView"
+            android:textColor="@color/recycle_row"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/txt_pdfName"
+            app:layout_constraintTop_toBottomOf="@+id/txt_pdfName" />
+
+        <ImageView
+            android:id="@+id/bt_option"
+            android:layout_width="35dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:padding="5dp"
+            android:src="@drawable/dots_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_bookmarks"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bt_bookmarks" />
+
+        <ImageView
+
+            android:layout_marginEnd="8dp"
+            android:id="@+id/bt_bookmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/bookmark_unselected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/bt_option"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
