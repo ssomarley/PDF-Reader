@@ -1,25 +1,26 @@
-package com.mallmo.pdf_reader;
+package com.mallmo.pdf_reader.FileFragments;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 
+import com.mallmo.pdf_reader.R;
 import com.mallmo.pdf_reader.databinding.FragmentMyFragment1Binding;
+import com.mallmo.pdf_reader.Adapters.onItemListener;
+import com.mallmo.pdf_reader.Adapters.pdfRecyclAdapter;
+import com.mallmo.pdf_reader.pdfShow;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
-public class library_fragment extends Fragment implements onItemListener {
+public class pdf_fragment extends Fragment implements onItemListener {
 ArrayList<File> list=new ArrayList<>();
     FragmentMyFragment1Binding binding;
 

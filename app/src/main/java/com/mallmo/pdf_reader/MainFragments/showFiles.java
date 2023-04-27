@@ -5,21 +5,27 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.mallmo.pdf_reader.Adapters.filesViewPagerAdapter;
+import com.mallmo.pdf_reader.MainActivity;
 import com.mallmo.pdf_reader.R;
 import com.mallmo.pdf_reader.databinding.FragmentFilesBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link files#newInstance} factory method to
+ * Use the {@link showFiles#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class files extends Fragment {
+public class showFiles extends Fragment {
 private filesViewPagerAdapter adapter;
 FragmentFilesBinding binding;
     // TODO: Rename parameter arguments, choose names that match
@@ -31,7 +37,7 @@ FragmentFilesBinding binding;
     private String mParam1;
     private String mParam2;
 
-    public files() {
+    public showFiles() {
         // Required empty public constructor
     }
 
@@ -44,8 +50,8 @@ FragmentFilesBinding binding;
      * @return A new instance of fragment files.
      */
     // TODO: Rename and change types and number of parameters
-    public static files newInstance(String param1, String param2) {
-        files fragment = new files();
+    public static showFiles newInstance(String param1, String param2) {
+        showFiles fragment = new showFiles();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -74,6 +80,13 @@ FragmentFilesBinding binding;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        filesViewPagerAdapter adapter=new filesViewPagerAdapter( this, MainActivity.getFragments());
+       String[] title=getResources().getStringArray(R.array.tabLayoutTitle);
+
+        binding.viewPager.setAdapter(adapter);
+        new TabLayoutMediator(binding.tabLay,binding.viewPager
+                ,(tab,position)->tab.setText(title[position])).attach();
 
     }
 }

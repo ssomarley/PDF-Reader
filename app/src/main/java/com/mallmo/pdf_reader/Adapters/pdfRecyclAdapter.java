@@ -1,4 +1,4 @@
-package com.mallmo.pdf_reader;
+package com.mallmo.pdf_reader.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +8,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.IllegalFormatWidthException;
-import java.util.List;
+import com.mallmo.pdf_reader.R;
 
-import javax.security.auth.PrivateCredentialPermission;
+import java.io.File;
+import java.util.List;
 
 public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myholder> {
 
