@@ -43,7 +43,7 @@ public  class getFiles {
         }
 
 
-       // return arrayList;
+
     }
 
     public List<File> getWordFiles(){
