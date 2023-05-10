@@ -4,9 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".MainFragments.files">
 
-    tools:context=".MainFragments.myFiles">
 
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabLay"
+        app:tabIndicatorAnimationMode="elastic"
+        app:tabIndicator="@drawable/tab_back"
+        app:tabIndicatorColor="@null"
+        app:tabIndicatorGravity="stretch"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -16,91 +30,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLay" />
-
-
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBar"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <ImageButton
-        android:id="@+id/bt_menu"
-        android:layout_width="35dp"
-        android:layout_height="35sp"
-        android:layout_marginLeft="8dp"
-        android:background="@null"
-
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_baseline_menu_24"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        app:tabInlineLabel="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        app:tabIconTint="@null"
-        app:tabIndicator="@drawable/tab_back"
-        app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorColor="@null"
-        app:tabIndicatorFullWidth="true"
-        app:tabIndicatorGravity="stretch"
-        app:tabMode="fixed"
-        app:tabSelectedTextAppearance="@color/purple_200"
-        app:tabTextColor="@color/white"
-        app:tabUnboundedRipple="false" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/appTitle"
-        android:textColor="@color/white"
-        android:textStyle="bold|italic"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintStart_toEndOf="@+id/bt_menu"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/bt_serch"
-        android:layout_width="35dp"
-        android:layout_height="35sp"
-        android:layout_marginEnd="24dp"
-
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintEnd_toStartOf="@+id/bt_sort"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
-        android:id="@+id/bt_sort"
-        android:layout_width="35dp"
-        android:layout_height="35sp"
-        android:layout_marginEnd="16dp"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_baseline_sort_by_alpha_24"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
