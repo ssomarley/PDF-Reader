@@ -12,7 +12,7 @@ public  class getFiles {
 
     public  List<File> exelList=new ArrayList<>();
 
-        //ljhlhlhlh
+
 
     public void getAllFiles(File file ){
 
@@ -43,7 +43,7 @@ public  class getFiles {
         }
 
 
-
+       // return arrayList;
     }
 
     public List<File> getWordFiles(){

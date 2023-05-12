@@ -1,6 +1,5 @@
 package com.mallmo.pdf_reader.Adapters;
 
-<<<<<<< HEAD
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.SharedPreferences;
@@ -34,35 +33,11 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
         this.myList = myList;
         this.Listener = listener;
         this.myLoadedList = myLoadedList;
-=======
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.mallmo.pdf_reader.R;
-
-import java.io.File;
-import java.util.List;
-
-public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myholder> {
-
-    List<File> myList;
-    private onItemListener Listener;
-
-    public pdfRecyclAdapter(List<File> myList, onItemListener listener) {
-        this.myList = myList;
-        this.Listener=listener;
->>>>>>> origin/master
     }
 
     @NonNull
     @Override
     public myholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-<<<<<<< HEAD
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pdf_library, parent, false);
 
         return new myholder(v, Listener, myList);
@@ -81,16 +56,6 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
 
         }
 
-=======
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.pdf_library,parent,false);
-
-        return new myholder(v,Listener);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull myholder holder, int position) {
-                holder.txt.setText(myList.get(position).getName());
->>>>>>> origin/master
     }
 
     @Override
@@ -99,7 +64,6 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
     }
 
 
-<<<<<<< HEAD
     public static class myholder extends RecyclerView.ViewHolder {
 
 
@@ -183,24 +147,5 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
         }
 
 
-=======
-
-    public static class myholder extends RecyclerView.ViewHolder  {
-        TextView txt;
-        public myholder(@NonNull View itemView, onItemListener listener) {
-            super(itemView);
-        txt=itemView.findViewById(R.id.txt_pdfName);
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener !=null){
-                    if (getAdapterPosition() !=RecyclerView.NO_POSITION){
-                        listener.onItemClick(getAdapterPosition());
-                    }
-                }
-            }
-        });
-        }
->>>>>>> origin/master
     }
 }

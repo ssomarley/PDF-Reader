@@ -7,4 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="pdf_back">#C62828</color>
+    <color name="pdf_status">#B71C1C</color>
+    <color name="word_back">#4527A0</color>
+    <color name="word_status">#311B92</color>
+    <color name="excell_back">#2E7D32</color>
+    <color name="excell_status">#1B5E20</color>
+    <color name="botomNaveSelected">#EF6C00</color>
+    <color name="recycle_row">#F3141417</color>
+    <color name="DeActive">#555551</color>
+
+
 </resources>
