@@ -72,7 +72,7 @@ FragmentFilesBinding binding;
         binding=FragmentFilesBinding.inflate(inflater,container,false);
         tabsBackground= new int[]{R.color.pdf_back, R.color.excell_back, R.color.word_back};
         statusBackground=new int[]{R.color.pdf_status,R.color.excell_status,R.color.word_status};
-        tabsIcon=new int[]{R.drawable.p,R.drawable.w,R.drawable.x};
+        tabsIcon=new int[]{R.drawable.p,R.drawable.x,R.drawable.w};
 
 
         return binding.getRoot();

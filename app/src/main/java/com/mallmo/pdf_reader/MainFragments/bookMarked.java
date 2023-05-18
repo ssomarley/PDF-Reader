@@ -28,7 +28,7 @@ public class bookMarked extends Fragment {
 FragmentBookMarkedBinding binding;
 private int[] tabsBackground;
 private int[] statusBackground;
-private int[] tabsIcon =tabsIcon=new int[]{R.drawable.p,R.drawable.w,R.drawable.x};
+private int[] tabsIcon =tabsIcon=new int[]{R.drawable.p,R.drawable.x,R.drawable.w};
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";

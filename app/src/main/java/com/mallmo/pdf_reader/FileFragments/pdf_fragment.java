@@ -20,31 +20,33 @@ import com.mallmo.pdf_reader.Adapters.onItemListener;
 import com.mallmo.pdf_reader.Adapters.pdfRecyclAdapter;
 import com.mallmo.pdf_reader.ShowFIles.showPDFfiles;
 import com.mallmo.pdf_reader.getFiles;
+import com.mallmo.pdf_reader.recyclPdf;
+import com.mallmo.pdf_reader.statics;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class pdf_fragment extends Fragment implements onItemListener {
-ArrayList<File> list=new ArrayList<>();
+ArrayList<recyclPdf> list=new ArrayList<>();
 private int mflag;
     FragmentMyFragment1Binding binding;
-    public static final String KEY="MY ARRAY KEY";
+
 
     public static pdf_fragment newInstance(int flag) {
         pdf_fragment fragment =new pdf_fragment();
         Bundle args = new Bundle();
-        args.putInt(KEY, flag);
+        args.putInt(statics.KEY, flag);
         fragment.setArguments(args);
         return fragment;
     }
 
-    //'k;l
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments()!=null){
-            mflag=getArguments().getInt(KEY);
+            mflag=getArguments().getInt(statics.KEY);
         }
     }
 
@@ -57,11 +59,9 @@ private int mflag;
         getFiles files=new getFiles();
         files.getAllFiles(Environment.getExternalStorageDirectory());
 
-        //iiii
-
         if (MainActivity.FLAG==MainActivity.MY_FILES_STATE){
 
-            list= (ArrayList<File>) files.getPdfFiles();
+            list= (ArrayList<recyclPdf>) files.getPdfFiles();
 
         } else if (MainActivity.FLAG==MainActivity.MY_BOOKMARKED_STATE) {
 
@@ -70,7 +70,7 @@ private int mflag;
         }
 
         sharedPreffConfig config=new sharedPreffConfig(getContext());
-        List<File> myFiles=config.loadingFiles();
+        List<recyclPdf> myFiles=config.loadingFiles();
         if (myFiles==null) myFiles=new ArrayList<>();
         pdfRecyclAdapter adapter=new pdfRecyclAdapter(list, this,myFiles);
          binding.recycl.setHasFixedSize(true);
@@ -89,7 +89,7 @@ private int mflag;
 
     @Override
     public void onItemClick(int position ) {
-       String path=list.get(position).getAbsolutePath();
+       String path=list.get(position).file.getAbsolutePath();
        showPDFfiles pdfFragmemt= showPDFfiles.newInstance(path ,MainActivity.FLAG);
 
         FragmentTransaction transaction=getActivity().getSupportFragmentManager().beginTransaction();
@@ -110,7 +110,7 @@ private int mflag;
 
         }
         else {
-            list= (ArrayList<File>) config.loadingFiles();
+            list= (ArrayList<recyclPdf>) config.loadingFiles();
         }
     }
 }

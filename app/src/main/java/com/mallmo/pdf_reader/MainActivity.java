@@ -5,34 +5,48 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.mallmo.pdf_reader.FileFragments.excel_fragment;
 import com.mallmo.pdf_reader.FileFragments.pdf_fragment;
 import com.mallmo.pdf_reader.FileFragments.word_fragment;
 import com.mallmo.pdf_reader.MainFragments.bookMarked;
 import com.mallmo.pdf_reader.MainFragments.myFiles;
-import com.mallmo.pdf_reader.SavingFile.fileDetails;
+import com.mallmo.pdf_reader.SavingFile.sharedPreffConfig;
 import com.mallmo.pdf_reader.databinding.ActivityMainBinding;
+import com.mallmo.pdf_reader.databinding.BottomSheetLayoutBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
     public static ActivityMainBinding binding;
     FragmentTransaction transaction;
     public permossionTaker permission;
     public static  int FLAG ;
     private ActivityResultLauncher<Intent> launcher;
+    public static MainActivity instance;
 public static final int MY_FILES_STATE=101;
 public static final int MY_BOOKMARKED_STATE=102;
     @Override
@@ -40,7 +54,7 @@ public static final int MY_BOOKMARKED_STATE=102;
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        instance=this;
 
 
         launcher = registerForActivityResult
@@ -63,6 +77,7 @@ public static final int MY_BOOKMARKED_STATE=102;
        binding.btFloat.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+
                Toast.makeText(MainActivity.this, "float btn", Toast.LENGTH_SHORT).show();
            }
        });
@@ -73,7 +88,10 @@ public static final int MY_BOOKMARKED_STATE=102;
 
     }
 
-   public static List<Fragment> getFragments() {
+
+
+
+    public static List<Fragment> getFragments() {
       List<Fragment> fragmentList=new ArrayList<>();
         fragmentList.add(new pdf_fragment());
         fragmentList.add(new word_fragment());
@@ -100,8 +118,7 @@ public static final int MY_BOOKMARKED_STATE=102;
         if (!permission.checkPermission()) {
             permission.requestPermission();
         }else {
-            //        binding.imgFile.setColorFilter(getResources().getColor(R.color.botomNaveSelected));
-//        binding.imgMarked.setColorFilter(getResources().getColor(R.color.DeActive));
+
             myFiles f=new myFiles();
             transaction= getSupportFragmentManager().beginTransaction();
             transaction.replace(binding.frame.getId(),f);

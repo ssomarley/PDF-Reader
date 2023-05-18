@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mallmo.pdf_reader.recyclPdf;
 import com.mallmo.pdf_reader.statics;
 
 import java.io.File;
@@ -26,12 +27,12 @@ public class sharedPreffConfig {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void saveFileToMemory(List<File> fileList){
+    public void saveFileToMemory(List<recyclPdf> fileList){
 
         Gson json=new Gson();
         List<fileDetails> fileObj=new ArrayList<>();
         if (fileList !=null){
-            fileList.forEach(file ->  fileObj.add(new fileDetails(file.getName(),file.getAbsolutePath())));
+            fileList.forEach(file ->  fileObj.add(new fileDetails(file.file.getName(),file.file.getAbsolutePath())));
         }
 
 
@@ -43,9 +44,9 @@ public class sharedPreffConfig {
 
     }
 
-    public List<File> loadingFiles(){
+    public List<recyclPdf> loadingFiles(){
         List<fileDetails> fileDetailsList=new ArrayList<>();
-        List<File> fileList=new ArrayList<>();
+        List<recyclPdf> fileList=new ArrayList<>();
         String path= preferences.getString(statics.SHERED_EDITOE_KEY,"");
         Gson json=new Gson();
         Type type=new TypeToken<List<fileDetails>>(){}.getType();
@@ -53,7 +54,7 @@ public class sharedPreffConfig {
         fileDetailsList=json.fromJson(path,type);
         if (fileDetailsList !=null ){
             for(fileDetails file :fileDetailsList){
-                fileList.add(new File(file.filePath));
+                fileList.add(new recyclPdf(new File(file.filePath)));
 
             }
         }
