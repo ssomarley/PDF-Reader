@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.mallmo.pdf_reader.MainActivity;
 import com.mallmo.pdf_reader.R;
 import com.mallmo.pdf_reader.SavingFile.fileDetails;
@@ -119,7 +121,9 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
                 public void onClick(View v) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION) {
 
-                        showBottomSheet();
+                        recycleClicksHelper helper=new recycleClicksHelper
+                                (myList.get(getAdapterPosition()).file.getAbsolutePath());
+                        helper.bookmarkClick(getAdapterPosition());
 
                     }
                 }
@@ -149,31 +153,8 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
             });
         }
 
-        private void showBottomSheet() {
+        @SuppressLint("ResourceAsColor")
 
-
-            BottomSheetLayoutBinding BtBinding=BottomSheetLayoutBinding.inflate(MainActivity.instance.getLayoutInflater());
-
-
-            final Dialog dialog=new Dialog(MainActivity.instance);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            //dialog.setContentView(R.layout.bottom_sheet_layout);
-            dialog.setContentView(BtBinding.getRoot());
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            dialog.getWindow().getAttributes().windowAnimations=R.style.bottomSheet_animation;
-            dialog.getWindow().setGravity(Gravity.BOTTOM);
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
-            BtBinding.deleteLay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(MainActivity.instance, "delete", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-        }
 
         @RequiresApi(api = Build.VERSION_CODES.N)
         private void savingToStorage(int position, List<recyclPdf> myList) {

@@ -4,6 +4,8 @@
 
    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
       android:maxSdkVersion="29"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
+
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
 
         tools:ignore="ScopedStorage" />
@@ -20,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pdf_Reader"
         tools:targetApi="33">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

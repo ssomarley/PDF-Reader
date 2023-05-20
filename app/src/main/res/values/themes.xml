@@ -17,4 +17,12 @@
         <item name="android:windowEnterAnimation">@anim/botom_sheet_in</item>
         <item name="android:windowExitAnimation">@anim/botom_sheet_out</item>
     </style>
+
+
+    <style name="bottomSheet_dialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetStyle</item>
+    </style>
+    <style name="bottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>
