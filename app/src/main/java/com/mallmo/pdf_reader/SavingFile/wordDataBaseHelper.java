@@ -3,13 +3,12 @@ package com.mallmo.pdf_reader.SavingFile;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mallmo.pdf_reader.recyclPdf;
+import com.mallmo.pdf_reader.recycleListFormat;
 import com.mallmo.pdf_reader.statics;
 
 import java.io.File;
@@ -17,22 +16,21 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class sharedPreffConfig {
-
+public class wordDataBaseHelper {
     public Context context;
     public SharedPreferences preferences;
-    public sharedPreffConfig(Context context) {
+    public wordDataBaseHelper(Context context) {
         this.context = context;
-        preferences=context.getSharedPreferences(statics.SHARED_KEY, Context.MODE_PRIVATE);
+        preferences=context.getSharedPreferences(statics.WORD_PREFF_KEY, Context.MODE_PRIVATE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void saveFileToMemory(List<recyclPdf> fileList){
+    public void saveFileToMemory(List<recycleListFormat> fileList){
 
         Gson json=new Gson();
         List<fileDetails> fileObj=new ArrayList<>();
         if (fileList !=null){
-            fileList.forEach(file ->  fileObj.add(new fileDetails(file.file.getName(),file.file.getAbsolutePath())));
+            fileList.forEach(file ->  fileObj.add(new fileDetails(file.file.getName(),file.file.getAbsolutePath(), file.getId())));
         }
 
 
@@ -44,9 +42,9 @@ public class sharedPreffConfig {
 
     }
 
-    public List<recyclPdf> loadingFiles(){
+    public List<recycleListFormat> loadingFiles(){
         List<fileDetails> fileDetailsList=new ArrayList<>();
-        List<recyclPdf> fileList=new ArrayList<>();
+        List<recycleListFormat> fileList=new ArrayList<>();
         String path= preferences.getString(statics.SHERED_EDITOE_KEY,"");
         Gson json=new Gson();
         Type type=new TypeToken<List<fileDetails>>(){}.getType();
@@ -54,11 +52,12 @@ public class sharedPreffConfig {
         fileDetailsList=json.fromJson(path,type);
         if (fileDetailsList !=null ){
             for(fileDetails file :fileDetailsList){
-                fileList.add(new recyclPdf(new File(file.filePath)));
+                fileList.add(new recycleListFormat(new File(file.filePath),file.id));
 
             }
         }
 
         return fileList;
     }
+
 }

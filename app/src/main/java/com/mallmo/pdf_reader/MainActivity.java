@@ -5,35 +5,35 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.Gravity;
+import android.provider.DocumentsContract;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.mallmo.pdf_reader.FileFragments.excel_fragment;
 import com.mallmo.pdf_reader.FileFragments.pdf_fragment;
 import com.mallmo.pdf_reader.FileFragments.word_fragment;
 import com.mallmo.pdf_reader.MainFragments.bookMarked;
 import com.mallmo.pdf_reader.MainFragments.myFiles;
-import com.mallmo.pdf_reader.SavingFile.sharedPreffConfig;
+import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
+import com.mallmo.pdf_reader.ShowFIles.showPDFfiles;
 import com.mallmo.pdf_reader.databinding.ActivityMainBinding;
-import com.mallmo.pdf_reader.databinding.BottomSheetLayoutBinding;
+import com.mallmo.pdf_reader.databinding.IntroductionDialogBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,19 +42,33 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static ActivityMainBinding binding;
+
+    public static  getFiles getFiles;
     FragmentTransaction transaction;
+    private ActivityResultLauncher<Intent> launcher;
     public permossionTaker permission;
     public static  int FLAG ;
-    private ActivityResultLauncher<Intent> launcher;
+
+    private ActivityResultLauncher<String> Filelauncher;
+
     public static MainActivity instance;
 public static final int MY_FILES_STATE=101;
 public static final int MY_BOOKMARKED_STATE=102;
+public static final int MY_FLOUT_BUTTON_STATE=103;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         instance=this;
+        dataBaseHelper helper=new dataBaseHelper(this);
+        wordDataBaseHelper whelper =new wordDataBaseHelper(this);
+        excelDataBaseHelper exhelper =new excelDataBaseHelper(this);
+
+//               helper.loadingFiles().clear();  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            helper.saveFileToMemory(new ArrayList<>());
+//        }
+
 
 
         launcher = registerForActivityResult
@@ -65,6 +79,7 @@ public static final int MY_BOOKMARKED_STATE=102;
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                                     if (Environment.isExternalStorageManager()) {
                                         Toast.makeText(MainActivity.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                                        new myAsyntask().execute();
                                     }
 
                                 } else
@@ -74,21 +89,92 @@ public static final int MY_BOOKMARKED_STATE=102;
 
 
 
+        // marboot be load kardan file az tarighe float button
+        Filelauncher=registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri result) {
+                if (result != null){
+                    String filePath=result.getPath();
+
+                    if (filePath.toLowerCase().endsWith(".pdf")){
+
+                        showPDFfiles showFile=showPDFfiles.newInstance(result.toString(),MY_FLOUT_BUTTON_STATE);
+                        transaction=getSupportFragmentManager().beginTransaction();
+                        transaction.setReorderingAllowed(true);
+                        transaction.replace(binding.frame.getId(),showFile,"");
+                        transaction.commit();
+
+                    } else if (filePath.toLowerCase().endsWith(".xlsx")) {
+
+                    } else if (filePath.toLowerCase().endsWith(".docx")) {
+
+                    }else {
+                        Toast.makeText(MainActivity.this, "File Was Incompatible", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            }
+        });
+        permission= new permossionTaker(this, launcher);
+
        binding.btFloat.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               if (!permission.checkPermission()) {
+                   showPermissionDialog();
 
-               Toast.makeText(MainActivity.this, "float btn", Toast.LENGTH_SHORT).show();
+               }else {
+                   //load kardan file az tarighe intent
+                     addFileFromBotton();
+
+               }
            }
        });
-        permission = new permossionTaker(this, launcher);
+
+       //check kardan permission
         if (!permission.checkPermission()) {
-            permission.requestPermission();
+            showPermissionDialog();
         }
+        else {
+            new myAsyntask().execute();
+
+        }
+
+
+    }
+
+    @SuppressLint("ResourceAsColor")
+    public void showPermissionDialog() {
+
+
+            IntroductionDialogBinding InBinding=IntroductionDialogBinding.inflate(getLayoutInflater());
+            //gereftan size **********
+            Point size= new Point();
+            getWindowManager().getDefaultDisplay().getSize(size);
+            Dialog dialog=new Dialog(this);
+            dialog.setContentView(InBinding.getRoot());
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            dialog.getWindow().setLayout((int) (0.9*size.x), (int) (0.7*size.y));
+            dialog.setCanceledOnTouchOutside(false);
+            InBinding.proceedBt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    permission.requestPermission();
+                    dialog.dismiss();
+                }
+            });
+
+
+        dialog.show();
 
     }
 
 
+    private void addFileFromBotton() {
+
+        Filelauncher.launch("*/*");
+    }
 
 
     public static List<Fragment> getFragments() {
@@ -105,18 +191,18 @@ public static final int MY_BOOKMARKED_STATE=102;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bt_files:
-                getFiles();
+                goTOFiles();
                 break;
             case R.id.bt_library:
-                getBookMarked();
+                 goToBookMarks();
                 break;
         }
     }
 
-    public void getFiles() {
-        permission = new permossionTaker(this, launcher);
+    public void goTOFiles() {
+
         if (!permission.checkPermission()) {
-            permission.requestPermission();
+                showPermissionDialog();
         }else {
 
             myFiles f=new myFiles();
@@ -127,13 +213,14 @@ public static final int MY_BOOKMARKED_STATE=102;
 
     }
 
-    private void getBookMarked() {
-        binding.imgMarked.setColorFilter(getResources().getColor(R.color.botomNaveSelected));
-        binding.imgFile.setColorFilter(getResources().getColor(R.color.DeActive));
-        permission = new permossionTaker(this, launcher);
+    private void goToBookMarks() {
+
         if (!permission.checkPermission()) {
-            permission.requestPermission();
+            showPermissionDialog();
         } else {
+            binding.imgMarked.setColorFilter(getResources().getColor(R.color.botomNaveSelected));
+            binding.imgFile.setColorFilter(getResources().getColor(R.color.DeActive));
+
             bookMarked fragment = new bookMarked();
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(binding.frame.getId(), fragment);
@@ -141,6 +228,49 @@ public static final int MY_BOOKMARKED_STATE=102;
         }
     }
 
+    public class myAsyntask extends AsyncTask<Void,Void,getFiles>{
+        @Override
+        protected void onPostExecute(getFiles getFiles) {
+            super.onPostExecute(getFiles);
+            setGetFiles(getFiles);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.animationView.setVisibility(View.GONE);
+            binding.loadingTxt.setVisibility(View.GONE);
+            goTOFiles();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.animationView.setVisibility(View.VISIBLE);
+            binding.loadingTxt.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected getFiles doInBackground(Void... objects) {
+
+            getFiles files=new getFiles();
+            files.getAllFiles(Environment.getExternalStorageDirectory());
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return files;
+
+        }
+    }
 
 
+
+
+    public static com.mallmo.pdf_reader.getFiles getGetFiles() {
+        return getFiles;
+    }
+
+    public static void setGetFiles(com.mallmo.pdf_reader.getFiles getFiles) {
+        MainActivity.getFiles = getFiles;
+    }
 }

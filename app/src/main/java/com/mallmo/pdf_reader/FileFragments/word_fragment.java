@@ -1,5 +1,9 @@
 package com.mallmo.pdf_reader.FileFragments;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,17 +13,19 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.aspose.words.Document;
 import com.mallmo.pdf_reader.Adapters.onItemListener;
+import com.mallmo.pdf_reader.Adapters.onItemSaveClickListtener;
 import com.mallmo.pdf_reader.Adapters.pdfRecyclAdapter;
 import com.mallmo.pdf_reader.MainActivity;
-import com.mallmo.pdf_reader.R;
-import com.mallmo.pdf_reader.SavingFile.sharedPreffConfig;
-import com.mallmo.pdf_reader.databinding.FragmentExcelFragmentBinding;
-import com.mallmo.pdf_reader.databinding.FragmentMyFragment1Binding;
+import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
 import com.mallmo.pdf_reader.databinding.FragmentWordFragmentBinding;
 import com.mallmo.pdf_reader.getFiles;
-import com.mallmo.pdf_reader.recyclPdf;
+import com.mallmo.pdf_reader.recycleListFormat;
 import com.mallmo.pdf_reader.statics;
 
 import java.io.File;
@@ -27,10 +33,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class word_fragment extends Fragment implements onItemListener {
+public class word_fragment extends Fragment implements onItemListener, onItemSaveClickListtener {
     FragmentWordFragmentBinding binding;
-    ArrayList<recyclPdf> list=new ArrayList<>();
+    ArrayList<recycleListFormat> list=new ArrayList<>();
     private int mflag;
+    pdfRecyclAdapter adapter;
+    wordDataBaseHelper config;
+    public getFiles files;
+    List<recycleListFormat> myLoadedList;
+
+
 
     public static word_fragment newInstance(int flag) {
         word_fragment fragment = new word_fragment();
@@ -46,6 +58,9 @@ public class word_fragment extends Fragment implements onItemListener {
         if (getArguments() != null) {
             mflag=getArguments().getInt(statics.KEY);
         }
+
+        config=new wordDataBaseHelper(getContext());
+        myLoadedList =config.loadingFiles();
     }
 
     @Override
@@ -53,25 +68,24 @@ public class word_fragment extends Fragment implements onItemListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding= FragmentWordFragmentBinding.inflate(inflater,container,false);
-        getFiles files=new getFiles();
-        files.getAllFiles(Environment.getExternalStorageDirectory());
 
+        files=MainActivity.getGetFiles();
 
+       // Document doc =new Document();
 
         if (MainActivity.FLAG==MainActivity.MY_FILES_STATE){
 
-          //  list= (ArrayList<File>) files.getWordFiles();
+            list= (ArrayList<recycleListFormat>) files.getWordFiles();
 
         } else if (MainActivity.FLAG==MainActivity.MY_BOOKMARKED_STATE) {
 
-           // loadingFileFromStorage();
+            loadingFileFromStorage();
 
         }
 
-        sharedPreffConfig config=new sharedPreffConfig(getContext());
-        List<recyclPdf> myFiles=config.loadingFiles();
-        if (myFiles==null) myFiles=new ArrayList<>();
-        pdfRecyclAdapter adapter=new pdfRecyclAdapter(list, this,myFiles);
+
+        if (myLoadedList==null) myLoadedList=new ArrayList<>();
+        adapter=new pdfRecyclAdapter(list, this,myLoadedList,this);
         binding.recycl.setHasFixedSize(true);
         binding.recycl.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycl.setAdapter(adapter);
@@ -83,5 +97,83 @@ public class word_fragment extends Fragment implements onItemListener {
     @Override
     public void onItemClick(int position) {
 
+        File myfile=list.get(position).getFile();
+        Uri uri=Uri.fromFile(myfile);
+        String mime=getContext().getContentResolver().getType(uri);
+        Intent intent=new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        intent.setType(mime);
+        getContext().startActivity(Intent.createChooser(intent,"Open with ...?"));
+    }
+
+    private void loadingFileFromStorage(){
+
+
+        list.clear();
+
+        if (config.loadingFiles() ==null){
+            list=new ArrayList<>();
+
+        }
+        else {
+            list= (ArrayList<recycleListFormat>) config.loadingFiles();
+        }
+    }
+
+    @Override
+    public void onItemSaveClick(int position ,int action) {
+        switch (action){
+            case statics.MARK:
+                markFile(position);
+                break;
+            case statics.UN_MARK:
+                unMarkFile(position);
+                break;
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void unMarkFile(int position) {
+
+        if (MainActivity.FLAG==MainActivity.MY_BOOKMARKED_STATE){
+            myLoadedList.remove(position);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                config.saveFileToMemory(myLoadedList);
+            }
+            List<recycleListFormat> arrayList=  files.getWordFiles();
+            for (recycleListFormat l : arrayList) {
+                if (l.file.getAbsolutePath().equals(list.get(position).file.getAbsolutePath())){
+                    l.setTag(false);
+                    files.setWordList(arrayList);
+                    break;
+                }
+            }
+            list.remove(position);
+        }
+        else {
+            list.get(position).setTag(false);
+        }
+        adapter.notifyDataSetChanged();
+        toast("UnMarked");
+    }
+
+
+    private void markFile(int position) {
+
+        recycleListFormat newFile=new recycleListFormat(new File(list.get(position).file.getAbsolutePath())
+                ,list.get(position).getId());
+        newFile.setTag(true);
+        myLoadedList.add(newFile);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.saveFileToMemory(myLoadedList);
+        }
+        list.get(position).setTag(true);
+        files.setWordList(list);
+        toast("Marked");
+
+    }
+
+    public void toast(String text){
+        Toast.makeText(getContext(),text,Toast.LENGTH_LONG).show();
     }
 }

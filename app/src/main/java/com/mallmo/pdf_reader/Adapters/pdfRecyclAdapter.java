@@ -1,21 +1,11 @@
 package com.mallmo.pdf_reader.Adapters;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,35 +14,59 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.mallmo.pdf_reader.MainActivity;
 import com.mallmo.pdf_reader.R;
+import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.fileDetails;
-import com.mallmo.pdf_reader.SavingFile.sharedPreffConfig;
-import com.mallmo.pdf_reader.databinding.BottomSheetLayoutBinding;
-import com.mallmo.pdf_reader.recyclPdf;
+import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
+import com.mallmo.pdf_reader.recycleListFormat;
+import com.mallmo.pdf_reader.statics;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myholder> {
-    public List<recyclPdf> myList;
-    public List<recyclPdf> myLoadedList;
-    private onItemListener Listener;
- public int pos=0;
-    public pdfRecyclAdapter(List<recyclPdf> myList, onItemListener listener, List<recyclPdf> myLoadedList) {
+
+
+
+    public pdfRecyclAdapter(List<recycleListFormat> myList, List<recycleListFormat> myLoadedList) {
         this.myList = myList;
-        this.Listener = listener;
         this.myLoadedList = myLoadedList;
     }
+
+
+
+    public  List<recycleListFormat> fileList;
+    public List<recycleListFormat> myList;
+    public List<recycleListFormat> myLoadedList;
+    private onItemListener Listener;
+    public onItemSaveClickListtener bookMarkListener;
+
+ public int pos=0;
+    public pdfRecyclAdapter(List<recycleListFormat> myList, onItemListener listener, List<recycleListFormat> myLoadedList,onItemSaveClickListtener bookMarkListener) {
+        this.myList =myList;
+        this.Listener = listener;
+        this.myLoadedList = myLoadedList;
+        this.bookMarkListener = bookMarkListener;
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setMyList(List<recycleListFormat> myList) {
+        this.myList = myList;
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
     public myholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pdf_recycler_view_row, parent, false);
 
-        return new myholder(v, Listener, myList);
+        return new myholder(v, Listener, myList,myLoadedList);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -61,35 +75,11 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
         holder.txt.setText(myList.get(position).file.getName());
         if (myList.get(position).getTag()){
             holder.bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
-            Log.i("ttt", String.valueOf(position +"\t"+ myList.get(position).file.getName()));
 
         }
-
-//        for (File file : myLoadedList) {
-//            if (file.getAbsoluteFile().getName().equals(myList.get(position).file.getAbsoluteFile().getName()) &&
-//                    file.getAbsolutePath().equals(myList.get(position).file.getAbsolutePath())  &&
-//                    position !=pos+12 &&
-//                    file.getAbsoluteFile().getParentFile().equals(myList.get(position).getAbsoluteFile().getParentFile()))
-//                   {
-//                        String fileName=file.getAbsoluteFile().getName();
-//                         String fileListName=file.getAbsoluteFile().getName();
-//                        int n=file.getAbsoluteFile().getName().length();
-//
-//                       for (int i = 0; i < n; i++) {
-//                           if (fileName.charAt(i)!=fileListName.charAt(i)){
-//                                break ;
-//                           }else if (i==n-1){
-//                               holder.bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
-//                               pos=position;
-//                           }
-//                       }
-//
-//
-//
-//
-//            }
-//
-//        }
+        if (MainActivity.FLAG==MainActivity.MY_BOOKMARKED_STATE){
+            holder.bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
+        }
 
     }
 
@@ -97,9 +87,11 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
     public int getItemCount() {
         return myList.size();
     }
+    @SuppressLint("NotifyDataSetChanged")
 
 
-    public static class myholder extends RecyclerView.ViewHolder {
+
+    public class myholder extends RecyclerView.ViewHolder {
 
 
         private List<fileDetails> fileDetailsList = new ArrayList<>();
@@ -109,7 +101,7 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
 
 
 
-        public myholder(@NonNull View itemView, onItemListener listener, List<recyclPdf> myList) {
+        public myholder(@NonNull View itemView, onItemListener listener, List<recycleListFormat> myList, List<recycleListFormat> myLoadedList) {
             super(itemView);
             txt = itemView.findViewById(R.id.txt_pdfName);
             txt_size = itemView.findViewById(R.id.txt_size);
@@ -121,9 +113,13 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
                 public void onClick(View v) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION) {
 
+
+                        dataBaseHelper config = new dataBaseHelper(itemView.getContext());
                         recycleClicksHelper helper=new recycleClicksHelper
-                                (myList.get(getAdapterPosition()).file.getAbsolutePath());
-                        helper.bookmarkClick(getAdapterPosition());
+                                (myList.get(getAdapterPosition()).file.getAbsolutePath(),myList,config.loadingFiles()
+                                        ,getAdapterPosition(),pdfRecyclAdapter.this);
+                        helper.bookmarkClick();
+
 
                     }
                 }
@@ -133,8 +129,7 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
                 @Override
                 public void onClick(View v) {
 
-                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && bookMarkListener != null) {
                         savingToStorage(getAdapterPosition(), myList);
 
                     }
@@ -151,35 +146,31 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
                     }
                 }
             });
+
+
         }
 
-        @SuppressLint("ResourceAsColor")
 
 
+
+            @SuppressLint("ResourceAsColor")
+
+//save kardane file
         @RequiresApi(api = Build.VERSION_CODES.N)
-        private void savingToStorage(int position, List<recyclPdf> myList) {
+        private void savingToStorage(int position, List<recycleListFormat> myList) {
 
-
-            sharedPreffConfig config = new sharedPreffConfig(itemView.getContext());
-
-            List<recyclPdf> fileList = config.loadingFiles();
-
-//                fileList.clear();
-//                config.saveFileToMemory(fileList);
-            if (fileList == null) {
-                fileList = new ArrayList<>();
-
-            } else {
                 boolean tag = true;
                 if (tag) {
-                    for (recyclPdf f : fileList) {
+                    for (recycleListFormat f : myLoadedList) {
 
                         if (myList.get(position).file.getName().equals(f.file.getName())) {
                             bt_bookmarks.setImageResource(R.drawable.bookmark_unselected);
-                            Toast.makeText(itemView.getContext(), "UnMarked", Toast.LENGTH_SHORT).show();
-                            fileList.remove(f);
-                            config.saveFileToMemory(fileList);
-                            tag = false;
+
+                           // fileList.remove(f);
+                           bookMarkListener.onItemSaveClick(position,statics.UN_MARK);
+
+                            //  myList.remove(myList.get(position));
+                         //   notifyDataSetChanged();
                             return;
                         }
                     }
@@ -187,18 +178,21 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
                     if (tag) {
 
                         bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
-                        fileList.add(new recyclPdf(new File(myList.get(position).file.getAbsolutePath())));
-                        config.saveFileToMemory(fileList);
-                        Toast.makeText(itemView.getContext(), "Marked", Toast.LENGTH_SHORT).show();
+                        bookMarkListener.onItemSaveClick(position,statics.MARK);
+
+//                        newRow.setTag(true);
+//                        fileList.add(newRow);
+//                        config(fileList);
                     }
                 }
 
 
-            }
+
 
 
         }
 
-
     }
+
+
 }

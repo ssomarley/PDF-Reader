@@ -9,8 +9,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:background="@color/white"
         android:layout_height="100dp"
+        android:background="@color/white"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -23,8 +23,7 @@
             android:layout_gravity="bottom"
             android:backgroundTint="#F3141417"
             app:fabCradleMargin="8dp"
-            app:fabCradleRoundedCornerRadius="50dp"
-           >
+            app:fabCradleRoundedCornerRadius="50dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,10 +31,10 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/bt_files"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:id="@+id/bt_files"
                     android:onClick="onClick"
                     android:orientation="vertical">
 
@@ -62,27 +61,22 @@
                 </LinearLayout>
 
 
-
-
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:visibility="invisible"
-                    android:orientation="vertical">
-
-
+                    android:orientation="vertical"
+                    android:visibility="invisible">
 
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/bt_library"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:onClick="onClick"
-                    android:id="@+id/bt_library"
                     android:orientation="vertical">
 
                     <ImageView
@@ -110,8 +104,8 @@
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            style="@style/float_btn"
             android:id="@+id/bt_float"
+            style="@style/float_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_anchor="@id/app_bar"
@@ -121,6 +115,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <FrameLayout
+
         android:id="@+id/frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -132,8 +127,52 @@
         app:layout_constraintVertical_bias="0.264">
 
 
+
     </FrameLayout>
 
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/progress_bar"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:SpinKit_Color="#A5CD36"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.77" />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/loading_txt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/anim" />
+
+
+    <TextView
+        android:id="@+id/loading_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textColor="#1B5E20"
+        android:text="@string/loading"
+        android:textStyle="italic|bold"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+             />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,9 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string-array name="tabLayoutTitle">
-        <item >PDF</item>
-        <item >Word</item>
-        <item >Axcel</item>
+        <item>PDF</item>
+        <item>Word</item>
+        <item>Excel</item>
     </string-array>
     <string name="appTitle">PDF Reader</string>
+    <string name="intro_txt_titile">Permission Required </string>
+    <string name="intro_ex">To manage your Files, allow PDF Reader"\n" to access Your files   </string>
+    <string name="loading">Application is Loading your Files</string>
 </resources>

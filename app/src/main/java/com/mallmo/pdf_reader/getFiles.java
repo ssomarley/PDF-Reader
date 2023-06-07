@@ -1,24 +1,44 @@
 package com.mallmo.pdf_reader;
 
-import com.mallmo.pdf_reader.SavingFile.sharedPreffConfig;
+import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public  class getFiles {
 
-    public  List<File> wordList=new ArrayList<>();
-    public  List<recyclPdf> pdfList=new ArrayList<>();
+    public List<recycleListFormat> wordList=new ArrayList<>();
+    public  List<recycleListFormat> pdfList=new ArrayList<>();
 
-    public  List<File> exelList=new ArrayList<>();
-    public recyclPdf finalPdfList;
+    public  List<recycleListFormat> exelList=new ArrayList<>();
+    public  recycleListFormat finalList;
+    public long id =0;
 
+    public void setWordList(List<recycleListFormat> wordList) {
+        this.wordList = wordList;
+    }
 
-    public void getAllFiles(File file ){
-        sharedPreffConfig config=new sharedPreffConfig(MainActivity.instance);
-        List<recyclPdf> loadedList=config.loadingFiles();
+    public void setPdfList(List<recycleListFormat> pdfList) {
+        this.pdfList = pdfList;
+    }
+
+    public void setExelList(List<recycleListFormat> exelList) {
+        this.exelList = exelList;
+    }
+
+    public  void getAllFiles(File file ){
+        //load kardan file save shode
+        dataBaseHelper config=new dataBaseHelper(MainActivity.instance);
+        List<recycleListFormat> pdfLoadedList=config.loadingFiles();
+
+        wordDataBaseHelper wconfig=new wordDataBaseHelper(MainActivity.instance);
+        List<recycleListFormat> wordLoadedList=wconfig.loadingFiles();
+
+        excelDataBaseHelper exConfig=new excelDataBaseHelper(MainActivity.instance);
+        List<recycleListFormat> exLoadedList=exConfig.loadingFiles();
 
 
         File[] files=file.listFiles();
@@ -31,26 +51,47 @@ public  class getFiles {
                 }else {
                     if ( singleFile.getName().toLowerCase().endsWith(".pdf")) {
 
-                        finalPdfList=new recyclPdf(singleFile);
-                        if (loadedList !=null){
-                            for (recyclPdf f:loadedList){
+                        finalList =new recycleListFormat(singleFile,++id);
+                        if (pdfLoadedList !=null){
+                            for (recycleListFormat f:pdfLoadedList){
                                 if (f.file.getAbsoluteFile().getName().equals(singleFile.getAbsoluteFile().getName()) &&
                                f.file.getAbsoluteFile().getAbsolutePath().equals(singleFile.getAbsoluteFile().getAbsolutePath())){
-                                    finalPdfList.setTag(true);
+                                    finalList.setTag(true);
                                 }
                             }
                         }
 
-                        pdfList.add(finalPdfList);
+                        pdfList.add(finalList);
 
                     }
 
 
                     else if (singleFile.getName().toLowerCase().endsWith(".xlsx")) {
-                     exelList.add(singleFile);
+                        finalList=new recycleListFormat(singleFile,++id);
+                        if (exLoadedList !=null){
+                            for (recycleListFormat f:exLoadedList){
+                                if (f.file.getAbsoluteFile().getName().equals(singleFile.getAbsoluteFile().getName()) &&
+                                        f.file.getAbsoluteFile().getAbsolutePath().equals(singleFile.getAbsoluteFile().getAbsolutePath())){
+                                    finalList.setTag(true);
+                                }
+                            }
+                        }
+
+
+                     exelList.add(finalList);
                     }
                     else if (singleFile.getName().toLowerCase().endsWith(".docx")) {
-                         wordList.add(singleFile);
+                           finalList=new recycleListFormat(singleFile,++id);
+
+                        if (wordLoadedList !=null){
+                            for (recycleListFormat f:wordLoadedList){
+                                if (f.file.getAbsoluteFile().getName().equals(singleFile.getAbsoluteFile().getName()) &&
+                                        f.file.getAbsoluteFile().getAbsolutePath().equals(singleFile.getAbsoluteFile().getAbsolutePath())){
+                                    finalList.setTag(true);
+                                }
+                            }
+                        }
+                         wordList.add(finalList);
                     }
 
                 }
@@ -61,15 +102,16 @@ public  class getFiles {
 
     }
 
-    public List<File> getWordFiles(){
+    public List<recycleListFormat> getWordFiles(){
         return (wordList == null) ? new ArrayList<>() :wordList ;
     }
     
-    public  List<recyclPdf> getPdfFiles(){
+    public    List<recycleListFormat> getPdfFiles(){
         return  (pdfList == null) ? new ArrayList<>() :pdfList ;
     }
-
-     public List<File> getExcelFiles(){
+     public List<recycleListFormat> getExcelFiles(){
         return (exelList == null) ? new ArrayList<>() :exelList ;
     }
+
+
 }

@@ -8,10 +8,16 @@ public class fileDetails {
     public String fileName;
     public String filePath;
 
+   public long id;
 
-    public fileDetails(String fileName, String filePath) {
+
+
+
+
+    public fileDetails(String fileName, String filePath,long id) {
         this.fileName = fileName;
         this.filePath = filePath;
+        this.id = id;
     }
 
 }
