@@ -7,7 +7,7 @@ public  class statics {
     public static final String SHERED_EDITOE_KEY="my SHERED_EDITOE_KEY";
 
     public static final String KEY="MY ARRAY KEY";
-
+    public static  int POPUP_STATE=0;
     public static final int PDF_STATE=10001;
     public static final int WORD_STATE=10002;
     public static final int EXCEL_STATE=10003;

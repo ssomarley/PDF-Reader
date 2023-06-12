@@ -70,9 +70,9 @@ FragmentFilesBinding binding;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding=FragmentFilesBinding.inflate(inflater,container,false);
-        tabsBackground= new int[]{R.color.pdf_back, R.color.excell_back, R.color.word_back};
-        statusBackground=new int[]{R.color.pdf_status,R.color.excell_status,R.color.word_status};
-        tabsIcon=new int[]{R.drawable.p,R.drawable.x,R.drawable.w};
+        tabsBackground= new int[]{R.color.pdf_back, R.color.word_status, R.color.excell_status};
+        statusBackground=new int[]{R.color.pdf_status,R.color.word_status,R.color.excell_status};
+        tabsIcon=new int[]{R.drawable.p,R.drawable.w,R.drawable.x};
 
 
         return binding.getRoot();

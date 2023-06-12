@@ -28,18 +28,9 @@
 
 
     </androidx.appcompat.widget.Toolbar>
-    <ImageButton
-        android:id="@+id/bt_menu"
-        android:layout_width="35dp"
-        android:layout_height="35sp"
-        android:layout_marginLeft="8dp"
-        android:background="@null"
 
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_baseline_menu_24"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLay"
         android:layout_width="match_parent"
@@ -59,42 +50,47 @@
         app:tabSelectedTextAppearance="@color/purple_200"
         app:tabTextColor="@color/white" />
 
+    <ImageButton
+        android:id="@+id/bt_menu"
+        android:layout_width="35dp"
+        android:layout_height="35sp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_baseline_menu_24"
+
+        app:layout_constraintBottom_toTopOf="@+id/tabLay"
+        app:layout_constraintEnd_toEndOf="@+id/toolBar"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+
         android:text="@string/appTitle"
         android:textColor="@color/white"
-        android:textStyle="bold|italic"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintStart_toEndOf="@+id/bt_menu"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/tabLay"
+        app:layout_constraintEnd_toStartOf="@+id/bt_menu"
+        app:layout_constraintStart_toEndOf="@+id/bt_serch"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/bt_serch"
         android:layout_width="35dp"
         android:layout_height="35sp"
-        android:layout_marginEnd="24dp"
 
+        android:layout_marginStart="8dp"
         android:background="@null"
         android:scaleType="fitXY"
         android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintEnd_toStartOf="@+id/bt_sort"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/bt_sort"
-        android:layout_width="35dp"
-        android:layout_height="35sp"
-        android:layout_marginEnd="16dp"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_baseline_sort_by_alpha_24"
-        app:layout_constraintBottom_toBottomOf="@+id/toolBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/tabLay"
+        app:layout_constraintStart_toStartOf="@+id/toolBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.523" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

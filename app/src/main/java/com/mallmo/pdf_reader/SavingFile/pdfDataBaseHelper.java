@@ -16,11 +16,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class dataBaseHelper {
+public class pdfDataBaseHelper {
 
     public Context context;
     public SharedPreferences preferences;
-    public dataBaseHelper(Context context) {
+    public pdfDataBaseHelper(Context context) {
         this.context = context;
         preferences=context.getSharedPreferences(statics.SHARED_KEY, Context.MODE_PRIVATE);
     }

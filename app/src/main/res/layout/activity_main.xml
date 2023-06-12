@@ -114,22 +114,22 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
     <FrameLayout
 
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.264">
-
+        app:layout_constraintVertical_bias="0.32999998">
 
 
     </FrameLayout>
-
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/progress_bar"

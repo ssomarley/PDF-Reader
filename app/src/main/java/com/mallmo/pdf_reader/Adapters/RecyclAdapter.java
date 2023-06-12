@@ -1,5 +1,9 @@
 package com.mallmo.pdf_reader.Adapters;
 
+import static com.mallmo.pdf_reader.statics.EXCEL_STATE;
+import static com.mallmo.pdf_reader.statics.PDF_STATE;
+import static com.mallmo.pdf_reader.statics.WORD_STATE;
+
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -8,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,26 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mallmo.pdf_reader.MainActivity;
 import com.mallmo.pdf_reader.R;
-import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.fileDetails;
-import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
-import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
 import com.mallmo.pdf_reader.recycleListFormat;
 import com.mallmo.pdf_reader.statics;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myholder> {
-
-
-
-    public pdfRecyclAdapter(List<recycleListFormat> myList, List<recycleListFormat> myLoadedList) {
-        this.myList = myList;
-        this.myLoadedList = myLoadedList;
-    }
+public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> {
 
 
 
@@ -43,15 +34,35 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
     public List<recycleListFormat> myList;
     public List<recycleListFormat> myLoadedList;
     private onItemListener Listener;
+    public onOptionClickListner onOptionClickListner;
     public onItemSaveClickListtener bookMarkListener;
+    public int state;
 
  public int pos=0;
-    public pdfRecyclAdapter(List<recycleListFormat> myList, onItemListener listener, List<recycleListFormat> myLoadedList,onItemSaveClickListtener bookMarkListener) {
+    public RecyclAdapter(List<recycleListFormat> myList, onItemListener listener
+            , List<recycleListFormat> myLoadedList, onItemSaveClickListtener bookMarkListener,
+                         onOptionClickListner onOptionClickListner,int state) {
+
         this.myList =myList;
         this.Listener = listener;
         this.myLoadedList = myLoadedList;
         this.bookMarkListener = bookMarkListener;
+        this.onOptionClickListner = onOptionClickListner;
+        this.state=state;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        switch (state) {
+            case EXCEL_STATE:
+                return EXCEL_STATE;
+            case PDF_STATE:
+                return PDF_STATE;
+            case WORD_STATE:
+                return WORD_STATE;
+
+        }
+        return PDF_STATE;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -64,9 +75,18 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
     @NonNull
     @Override
     public myholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pdf_recycler_view_row, parent, false);
+        switch (viewType) {
+            case PDF_STATE:
+                return new myholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.pdf_recycler_view_row, parent, false), Listener, myList,myLoadedList);
+            case WORD_STATE:
+                return new myholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.word_recycler_view_row, parent, false), Listener, myList,myLoadedList);
+            case EXCEL_STATE:
+                return new myholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.excel_recycler_view_row, parent, false), Listener, myList,myLoadedList);
 
-        return new myholder(v, Listener, myList,myLoadedList);
+                default:return new myholder(LayoutInflater.from(parent.getContext()).inflate(R.layout.pdf_recycler_view_row, parent, false), Listener, myList,myLoadedList);
+
+        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -111,15 +131,8 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
             bt_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-
-
-                        dataBaseHelper config = new dataBaseHelper(itemView.getContext());
-                        recycleClicksHelper helper=new recycleClicksHelper
-                                (myList.get(getAdapterPosition()).file.getAbsolutePath(),myList,config.loadingFiles()
-                                        ,getAdapterPosition(),pdfRecyclAdapter.this);
-                        helper.bookmarkClick();
-
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && onOptionClickListner!=null) {
+                            onOptionClickListner.onOptionClick(getAdapterPosition());
 
                     }
                 }
@@ -165,12 +178,7 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
 
                         if (myList.get(position).file.getName().equals(f.file.getName())) {
                             bt_bookmarks.setImageResource(R.drawable.bookmark_unselected);
-
-                           // fileList.remove(f);
                            bookMarkListener.onItemSaveClick(position,statics.UN_MARK);
-
-                            //  myList.remove(myList.get(position));
-                         //   notifyDataSetChanged();
                             return;
                         }
                     }
@@ -179,16 +187,8 @@ public class pdfRecyclAdapter extends RecyclerView.Adapter<pdfRecyclAdapter.myho
 
                         bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
                         bookMarkListener.onItemSaveClick(position,statics.MARK);
-
-//                        newRow.setTag(true);
-//                        fileList.add(newRow);
-//                        config(fileList);
                     }
                 }
-
-
-
-
 
         }
 

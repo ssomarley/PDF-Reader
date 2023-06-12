@@ -1,6 +1,6 @@
 package com.mallmo.pdf_reader;
 
-import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.pdfDataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
 
@@ -31,7 +31,7 @@ public  class getFiles {
 
     public  void getAllFiles(File file ){
         //load kardan file save shode
-        dataBaseHelper config=new dataBaseHelper(MainActivity.instance);
+        pdfDataBaseHelper config=new pdfDataBaseHelper(MainActivity.instance);
         List<recycleListFormat> pdfLoadedList=config.loadingFiles();
 
         wordDataBaseHelper wconfig=new wordDataBaseHelper(MainActivity.instance);
@@ -46,7 +46,6 @@ public  class getFiles {
 
             for (File singleFile:files){
                 if (singleFile.isDirectory() && !singleFile.isHidden()){
-
                    getAllFiles( singleFile);
                 }else {
                     if ( singleFile.getName().toLowerCase().endsWith(".pdf")) {

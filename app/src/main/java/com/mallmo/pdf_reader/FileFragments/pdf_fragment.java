@@ -1,5 +1,8 @@
 package com.mallmo.pdf_reader.FileFragments;
 
+import static com.mallmo.pdf_reader.statics.PDF_STATE;
+
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,18 +11,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
+import com.mallmo.pdf_reader.Adapters.RecyclAdapter;
 import com.mallmo.pdf_reader.Adapters.onItemSaveClickListtener;
+import com.mallmo.pdf_reader.Adapters.onOptionClickListner;
+import com.mallmo.pdf_reader.Adapters.recycleClicksHelper;
 import com.mallmo.pdf_reader.MainActivity;
 import com.mallmo.pdf_reader.R;
-import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.pdfDataBaseHelper;
 import com.mallmo.pdf_reader.databinding.FragmentMyFragment1Binding;
 import com.mallmo.pdf_reader.Adapters.onItemListener;
-import com.mallmo.pdf_reader.Adapters.pdfRecyclAdapter;
 import com.mallmo.pdf_reader.ShowFIles.showPDFfiles;
 import com.mallmo.pdf_reader.getFiles;
 import com.mallmo.pdf_reader.recycleListFormat;
@@ -29,9 +35,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class pdf_fragment extends Fragment implements onItemListener , onItemSaveClickListtener {
-   public  pdfRecyclAdapter adapter;
-    dataBaseHelper config;
+public class pdf_fragment extends Fragment implements onItemListener , onItemSaveClickListtener, onOptionClickListner  {
+   public RecyclAdapter adapter;
+    pdfDataBaseHelper config;
    public getFiles files;
     List<recycleListFormat> myLoadedList;
 ArrayList<recycleListFormat> list=new ArrayList<>();
@@ -51,12 +57,13 @@ private int mflag;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        statics.FILE_FLAG=statics.PDF_STATE;
+        statics.FILE_FLAG= PDF_STATE;
         if (getArguments()!=null){
             mflag=getArguments().getInt(statics.KEY);
         }
-        config=new dataBaseHelper(getContext());
+        config=new pdfDataBaseHelper(getContext());
         myLoadedList =config.loadingFiles();
+
     }
 
     @Override
@@ -79,10 +86,8 @@ private int mflag;
 
         }
 
-
-
         if (myLoadedList ==null) myLoadedList =new ArrayList<>();
-         adapter=new pdfRecyclAdapter(list, this, myLoadedList,this);
+         adapter=new RecyclAdapter(list, this, myLoadedList,this,this,PDF_STATE);
          binding.recycl.setHasFixedSize(true);
          binding.recycl.setLayoutManager(new LinearLayoutManager(getContext()));
          binding.recycl.setAdapter(adapter);
@@ -133,6 +138,7 @@ private int mflag;
                 case statics.UN_MARK:
                   unMarkFile(position);
                     break;
+
             }
     }
 
@@ -177,6 +183,21 @@ private int mflag;
     }
 
     public void toast(String text){
-            Toast.makeText(getContext(),text,Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),text,Toast.LENGTH_SHORT).show();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onOptionClick(int position) {
+        recycleClicksHelper helper=new recycleClicksHelper(list,myLoadedList,position,adapter,files, PDF_STATE);
+        helper.bookmarkClick();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        statics.POPUP_STATE= PDF_STATE;
     }
 }

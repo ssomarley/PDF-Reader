@@ -6,6 +6,9 @@ public class recycleListFormat {
     public File file;
     public boolean tag =false;
     public long id;
+
+
+
     public recycleListFormat(File file,long id) {
         this.file = file;
         this.id=id;

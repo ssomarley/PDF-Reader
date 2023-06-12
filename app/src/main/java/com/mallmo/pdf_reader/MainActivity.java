@@ -19,7 +19,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,7 +27,7 @@ import com.mallmo.pdf_reader.FileFragments.pdf_fragment;
 import com.mallmo.pdf_reader.FileFragments.word_fragment;
 import com.mallmo.pdf_reader.MainFragments.bookMarked;
 import com.mallmo.pdf_reader.MainFragments.myFiles;
-import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
+import com.mallmo.pdf_reader.SavingFile.pdfDataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.wordDataBaseHelper;
 import com.mallmo.pdf_reader.ShowFIles.showPDFfiles;
@@ -42,7 +41,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static ActivityMainBinding binding;
-
     public static  getFiles getFiles;
     FragmentTransaction transaction;
     private ActivityResultLauncher<Intent> launcher;
@@ -61,15 +59,13 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         instance=this;
-        dataBaseHelper helper=new dataBaseHelper(this);
+        pdfDataBaseHelper helper=new pdfDataBaseHelper(this);
         wordDataBaseHelper whelper =new wordDataBaseHelper(this);
         excelDataBaseHelper exhelper =new excelDataBaseHelper(this);
 
 //               helper.loadingFiles().clear();  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //            helper.saveFileToMemory(new ArrayList<>());
 //        }
-
-
 
         launcher = registerForActivityResult
                 (new ActivityResultContracts.StartActivityForResult(),
@@ -86,8 +82,6 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
                                     Toast.makeText(MainActivity.this, "Permission Denied", Toast.LENGTH_SHORT).show();
                             }
                         });
-
-
 
         // marboot be load kardan file az tarighe float button
         Filelauncher=registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
@@ -111,8 +105,6 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
                     }else {
                         Toast.makeText(MainActivity.this, "File Was Incompatible", Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
             }
         });
@@ -165,11 +157,8 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
                 }
             });
 
-
         dialog.show();
-
     }
-
 
     private void addFileFromBotton() {
 
@@ -179,6 +168,7 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
 
     public static List<Fragment> getFragments() {
       List<Fragment> fragmentList=new ArrayList<>();
+
         fragmentList.add(new pdf_fragment());
         fragmentList.add(new word_fragment());
         fragmentList.add(new excel_fragment());
@@ -253,11 +243,7 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
             getFiles files=new getFiles();
             files.getAllFiles(Environment.getExternalStorageDirectory());
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+
             return files;
 
         }
@@ -266,7 +252,7 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
 
 
 
-    public static com.mallmo.pdf_reader.getFiles getGetFiles() {
+    public static getFiles getGetFiles() {
         return getFiles;
     }
 

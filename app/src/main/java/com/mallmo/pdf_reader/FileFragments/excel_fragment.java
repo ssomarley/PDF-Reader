@@ -1,5 +1,9 @@
 package com.mallmo.pdf_reader.FileFragments;
 
+import static com.mallmo.pdf_reader.statics.EXCEL_STATE;
+import static com.mallmo.pdf_reader.statics.PDF_STATE;
+import static com.mallmo.pdf_reader.statics.WORD_STATE;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -8,7 +12,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +19,10 @@ import android.widget.Toast;
 
 import com.mallmo.pdf_reader.Adapters.onItemListener;
 import com.mallmo.pdf_reader.Adapters.onItemSaveClickListtener;
-import com.mallmo.pdf_reader.Adapters.pdfRecyclAdapter;
+import com.mallmo.pdf_reader.Adapters.RecyclAdapter;
+import com.mallmo.pdf_reader.Adapters.onOptionClickListner;
+import com.mallmo.pdf_reader.Adapters.recycleClicksHelper;
 import com.mallmo.pdf_reader.MainActivity;
-import com.mallmo.pdf_reader.SavingFile.dataBaseHelper;
 import com.mallmo.pdf_reader.SavingFile.excelDataBaseHelper;
 import com.mallmo.pdf_reader.databinding.FragmentExcelFragmentBinding;
 import com.mallmo.pdf_reader.getFiles;
@@ -29,11 +33,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class excel_fragment extends Fragment implements onItemListener , onItemSaveClickListtener {
+public class excel_fragment extends Fragment implements onItemListener , onItemSaveClickListtener, onOptionClickListner {
     FragmentExcelFragmentBinding binding;
     ArrayList<recycleListFormat> list=new ArrayList<>();
     private int mflag;
-    pdfRecyclAdapter adapter;
+    RecyclAdapter adapter;
     excelDataBaseHelper config;
     public getFiles files;
     List<recycleListFormat> myLoadedList;
@@ -50,13 +54,14 @@ public class excel_fragment extends Fragment implements onItemListener , onItemS
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        statics.FILE_FLAG=statics.EXCEL_STATE;
+        statics.FILE_FLAG= PDF_STATE;
 
         if (getArguments() != null) {
             mflag=getArguments().getInt(statics.KEY);
         }
         config=new excelDataBaseHelper(getContext());
         myLoadedList =config.loadingFiles();
+
     }
 
     @Override
@@ -74,7 +79,7 @@ public class excel_fragment extends Fragment implements onItemListener , onItemS
 
 
         if (myLoadedList==null) myLoadedList=new ArrayList<>();
-         adapter=new pdfRecyclAdapter(list, this,myLoadedList,this);
+         adapter=new RecyclAdapter(list, this,myLoadedList,this,this,EXCEL_STATE);
         binding.recycl.setHasFixedSize(true);
         binding.recycl.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycl.setAdapter(adapter);
@@ -147,7 +152,7 @@ public class excel_fragment extends Fragment implements onItemListener , onItemS
     }
 
     public void toast(String text){
-        Toast.makeText(getContext(),text,Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(),text,Toast.LENGTH_SHORT).show();
     }
 
     //loading file from storage
@@ -159,5 +164,23 @@ public class excel_fragment extends Fragment implements onItemListener , onItemS
         else {
             list= (ArrayList<recycleListFormat>) config.loadingFiles();
         }
+    }
+
+    @Override
+    public void onOptionClick(int position) {
+        recycleClicksHelper helper=new recycleClicksHelper(list,myLoadedList,position,adapter,files, EXCEL_STATE);
+        helper.bookmarkClick();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding=null;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        statics.POPUP_STATE= EXCEL_STATE;
     }
 }
