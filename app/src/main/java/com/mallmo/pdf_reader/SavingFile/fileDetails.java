@@ -10,11 +10,17 @@ public class fileDetails {
 
    public long id;
 
+   public boolean tag=false;
 
+    public boolean getTag() {
+        return tag;
+    }
 
+    public void setTag(boolean tag) {
+        this.tag = tag;
+    }
 
-
-    public fileDetails(String fileName, String filePath,long id) {
+    public fileDetails(String fileName, String filePath, long id) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.id = id;

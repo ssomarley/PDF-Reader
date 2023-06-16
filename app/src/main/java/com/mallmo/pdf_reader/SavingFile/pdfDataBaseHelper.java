@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class pdfDataBaseHelper {
-
     public Context context;
     public SharedPreferences preferences;
     public pdfDataBaseHelper(Context context) {
@@ -27,11 +26,16 @@ public class pdfDataBaseHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void saveFileToMemory(List<recycleListFormat> fileList){
-
         Gson json=new Gson();
         List<fileDetails> fileObj=new ArrayList<>();
         if (fileList !=null){
-            fileList.forEach(file ->  fileObj.add(new fileDetails(file.file.getName(),file.file.getAbsolutePath(), file.getId())));
+            for(recycleListFormat file :fileList){
+                fileDetails details=new fileDetails(file.file.getName(),file.file.getAbsolutePath(), file.getId());
+                details.setTag(file.getTag());
+                fileObj.add(details);
+            }
+
+          //  fileList.forEach(file ->  fileObj.add(new fileDetails(file.file.getName(),file.file.getAbsolutePath(), file.getId())));
         }
 
 
@@ -53,7 +57,10 @@ public class pdfDataBaseHelper {
         fileDetailsList=json.fromJson(path,type);
         if (fileDetailsList !=null ){
             for(fileDetails file :fileDetailsList){
-                fileList.add(new recycleListFormat(new File(file.filePath),file.id));
+                recycleListFormat format=new recycleListFormat(new File(file.filePath),file.id);
+                format.setTag(file.tag);
+                fileList.add(format);
+              //  fileList.add(new recycleListFormat(new File(file.filePath),file.id));
 
             }
         }

@@ -37,34 +37,16 @@ import java.util.List;
 
 
 public class bookMarked extends Fragment {
-    FragmentBookMarkedBinding binding;
+    public static FragmentBookMarkedBinding binding = FragmentBookMarkedBinding.inflate(LayoutInflater.from(MainActivity.instance), null, false);
     private int[] tabsBackground;
     private int[] statusBackground;
     private int[] tabsIcon = tabsIcon = new int[]{R.drawable.p, R.drawable.w, R.drawable.x};
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-
-    public static bookMarked newInstance(String param1, String param2) {
-        bookMarked fragment = new bookMarked();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
 
         //****marboot be onBackPress ***
         MainActivity.FLAG = MainActivity.MY_BOOKMARKED_STATE;
@@ -135,14 +117,14 @@ public class bookMarked extends Fragment {
 
         switch (statics.POPUP_STATE) {
             case PDF_STATE:
-                pdfDataBaseHelper helper=new pdfDataBaseHelper(getContext());
+                pdfDataBaseHelper helper = new pdfDataBaseHelper(getContext());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    List<recycleListFormat> list =helper.loadingFiles();
+                    List<recycleListFormat> list = helper.loadingFiles();
                     list.clear();
                     helper.saveFileToMemory(list);
                     for (recycleListFormat file : MainActivity.getFiles.getPdfFiles()) {
                         if (file.getTag()) {
-                           file.setTag(false);
+                            file.setTag(false);
                         }
                     }
                 }
@@ -150,9 +132,9 @@ public class bookMarked extends Fragment {
                 break;
             case WORD_STATE:
 
-                wordDataBaseHelper helper2=new wordDataBaseHelper(getContext());
+                wordDataBaseHelper helper2 = new wordDataBaseHelper(getContext());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    List<recycleListFormat> list =helper2.loadingFiles();
+                    List<recycleListFormat> list = helper2.loadingFiles();
                     list.clear();
                     helper2.saveFileToMemory(list);
 
@@ -166,9 +148,9 @@ public class bookMarked extends Fragment {
                 toast("Word List cleared");
                 break;
             case EXCEL_STATE:
-                excelDataBaseHelper helper3=new excelDataBaseHelper(getContext());
+                excelDataBaseHelper helper3 = new excelDataBaseHelper(getContext());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    List<recycleListFormat> list =helper3.loadingFiles();
+                    List<recycleListFormat> list = helper3.loadingFiles();
                     list.clear();
                     helper3.saveFileToMemory(list);
 
@@ -190,8 +172,9 @@ public class bookMarked extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        binding = null;
+//        binding = null;
     }
+
     public void toast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }

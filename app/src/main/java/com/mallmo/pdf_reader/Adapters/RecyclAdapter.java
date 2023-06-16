@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -32,13 +33,18 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
 
     public  List<recycleListFormat> fileList;
     public List<recycleListFormat> myList;
+
+    public List<recycleListFormat> getMyList() {
+        return myList;
+    }
+
     public List<recycleListFormat> myLoadedList;
     private onItemListener Listener;
     public onOptionClickListner onOptionClickListner;
     public onItemSaveClickListtener bookMarkListener;
     public int state;
 
- public int pos=0;
+
     public RecyclAdapter(List<recycleListFormat> myList, onItemListener listener
             , List<recycleListFormat> myLoadedList, onItemSaveClickListtener bookMarkListener,
                          onOptionClickListner onOptionClickListner,int state) {
@@ -49,6 +55,11 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
         this.bookMarkListener = bookMarkListener;
         this.onOptionClickListner = onOptionClickListner;
         this.state=state;
+    }
+
+    public void setFilterList(List<recycleListFormat> filterList){
+        this.myList=filterList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -68,6 +79,7 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
     @SuppressLint("NotifyDataSetChanged")
     public void setMyList(List<recycleListFormat> myList) {
         this.myList = myList;
+
         notifyDataSetChanged();
     }
 
@@ -97,9 +109,9 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
             holder.bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
 
         }
-        if (MainActivity.FLAG==MainActivity.MY_BOOKMARKED_STATE){
-            holder.bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
-        }
+//        if (MainActivity.FLAG==MainActivity.MY_BOOKMARKED_STATE){
+//            holder.bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
+//        }
 
     }
 
@@ -127,7 +139,6 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
             txt_size = itemView.findViewById(R.id.txt_size);
             bt_bookmarks = itemView.findViewById(R.id.bt_bookmarks);
             bt_option= itemView.findViewById(R.id.bt_option);
-
             bt_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -143,7 +154,7 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
                 public void onClick(View v) {
 
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && bookMarkListener != null) {
-                        savingToStorage(getAdapterPosition(), myList);
+                        savingToStorage(getAdapterPosition());
 
                     }
                 }
@@ -160,35 +171,40 @@ public class RecyclAdapter extends RecyclerView.Adapter<RecyclAdapter.myholder> 
                 }
             });
 
-
         }
-
-
-
 
             @SuppressLint("ResourceAsColor")
 
 //save kardane file
         @RequiresApi(api = Build.VERSION_CODES.N)
-        private void savingToStorage(int position, List<recycleListFormat> myList) {
+        private void savingToStorage(int position) {
+                List<recycleListFormat> myList=getMyList();
 
-                boolean tag = true;
-                if (tag) {
-                    for (recycleListFormat f : myLoadedList) {
+//                if (myList.get(position).getTag()) {
+//                    bt_bookmarks.setImageResource(R.drawable.bookmark_unselected);
+//                    bookMarkListener.onItemSaveClick(position,statics.UN_MARK);
+//
+//                }
+//                else  {
+//
+//                    bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
+//                    bookMarkListener.onItemSaveClick(position,statics.MARK);
+//                }
 
-                        if (myList.get(position).file.getName().equals(f.file.getName())) {
-                            bt_bookmarks.setImageResource(R.drawable.bookmark_unselected);
-                           bookMarkListener.onItemSaveClick(position,statics.UN_MARK);
-                            return;
-                        }
-                    }
 
-                    if (tag) {
+                for (recycleListFormat f : myLoadedList) {
 
-                        bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
-                        bookMarkListener.onItemSaveClick(position,statics.MARK);
+                    if (myList.get(position).getTag() ||
+                            myList.get(position).file.getAbsolutePath().equals(f.file.getAbsolutePath())) {
+                        bt_bookmarks.setImageResource(R.drawable.bookmark_unselected);
+                        bookMarkListener.onItemSaveClick(position, statics.UN_MARK);
+                        return;
                     }
                 }
+                bt_bookmarks.setImageResource(R.drawable.bookmark_selected);
+                bookMarkListener.onItemSaveClick(position,statics.MARK);
+
+
 
         }
 

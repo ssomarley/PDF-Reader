@@ -25,36 +25,18 @@ import com.mallmo.pdf_reader.databinding.FragmentPdfShowBinding;
 import java.io.File;
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link showPDFfiles#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class showPDFfiles extends Fragment {
     FragmentPdfShowBinding binding;
     private PDFView pdfView;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     public static final String FLAG_KEY="myFlagKey";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private int mFlag;
 
-    public showPDFfiles() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
 
-     * @return A new instance of fragment pdfShow.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static showPDFfiles newInstance(String param1, int flag) {
         showPDFfiles fragment = new showPDFfiles();
         Bundle args = new Bundle();
@@ -63,7 +45,6 @@ public class showPDFfiles extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

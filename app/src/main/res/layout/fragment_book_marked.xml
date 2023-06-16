@@ -16,7 +16,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tabLay" />
 
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
 
@@ -30,22 +29,21 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabInlineLabel="true"
-        app:tabIconTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        app:tabIconTint="@null"
         app:tabIndicator="@drawable/tab_back"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorColor="@null"
         app:tabIndicatorFullWidth="true"
         app:tabIndicatorGravity="stretch"
+        app:tabInlineLabel="true"
         app:tabMode="fixed"
         app:tabSelectedTextAppearance="@color/purple_200"
         app:tabTextColor="@color/white" />
@@ -58,6 +56,7 @@
         android:background="@null"
         android:scaleType="fitXY"
         android:src="@drawable/ic_baseline_menu_24"
+        android:visibility="visible"
 
         app:layout_constraintBottom_toTopOf="@+id/tabLay"
         app:layout_constraintEnd_toEndOf="@+id/toolBar"
@@ -68,29 +67,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginStart="16dp"
         android:text="@string/appTitle"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/tabLay"
-        app:layout_constraintEnd_toStartOf="@+id/bt_menu"
-        app:layout_constraintStart_toEndOf="@+id/bt_serch"
+        app:layout_constraintStart_toStartOf="@+id/toolBar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/bt_serch"
-        android:layout_width="35dp"
-        android:layout_height="35sp"
-
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:background="@null"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_baseline_search_24"
+        android:animateLayoutChanges="true"
+        android:backgroundTintMode="screen"
 
-        app:layout_constraintBottom_toTopOf="@+id/tabLay"
-        app:layout_constraintStart_toStartOf="@+id/toolBar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.523" />
+        android:maxWidth="220dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.285"
+        app:searchIcon="@drawable/ic_baseline_search_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

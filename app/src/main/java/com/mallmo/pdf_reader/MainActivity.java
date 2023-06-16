@@ -19,7 +19,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.mallmo.pdf_reader.FileFragments.excel_fragment;
@@ -63,9 +65,7 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
         wordDataBaseHelper whelper =new wordDataBaseHelper(this);
         excelDataBaseHelper exhelper =new excelDataBaseHelper(this);
 
-//               helper.loadingFiles().clear();  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            helper.saveFileToMemory(new ArrayList<>());
-//        }
+
 
         launcher = registerForActivityResult
                 (new ActivityResultContracts.StartActivityForResult(),
@@ -98,12 +98,13 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
                         transaction.replace(binding.frame.getId(),showFile,"");
                         transaction.commit();
 
-                    } else if (filePath.toLowerCase().endsWith(".xlsx")) {
-
-                    } else if (filePath.toLowerCase().endsWith(".docx")) {
+//                    } else if (filePath.toLowerCase().endsWith(".xlsx")) {
+//
+//                    } else if (filePath.toLowerCase().endsWith(".docx")) {
 
                     }else {
-                        Toast.makeText(MainActivity.this, "File Was Incompatible", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "File Was Incompatible \n Only pdf files are supported "
+                                , Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -130,16 +131,11 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
         }
         else {
             new myAsyntask().execute();
-
         }
-
-
     }
 
     @SuppressLint("ResourceAsColor")
     public void showPermissionDialog() {
-
-
             IntroductionDialogBinding InBinding=IntroductionDialogBinding.inflate(getLayoutInflater());
             //gereftan size **********
             Point size= new Point();
@@ -147,8 +143,9 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
             Dialog dialog=new Dialog(this);
             dialog.setContentView(InBinding.getRoot());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            dialog.getWindow().setLayout((int) (0.9*size.x), (int) (0.7*size.y));
+            dialog.getWindow().setLayout((int) (WindowManager.LayoutParams.MATCH_PARENT), (int) (WindowManager.LayoutParams.MATCH_PARENT));
             dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
             InBinding.proceedBt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,7 +161,6 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
 
         Filelauncher.launch("*/*");
     }
-
 
     public static List<Fragment> getFragments() {
       List<Fragment> fragmentList=new ArrayList<>();
@@ -242,7 +238,7 @@ public static final int MY_FLOUT_BUTTON_STATE=103;
 
             getFiles files=new getFiles();
             files.getAllFiles(Environment.getExternalStorageDirectory());
-
+            SystemClock.sleep(1000);
 
             return files;
 

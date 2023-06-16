@@ -34,7 +34,7 @@ import java.util.Objects;
 
 public class recycleClicksHelper {
 
-    private static final String TAG = "recycleClicksHelper";
+
     RecyclAdapter adapter;
     public List<recycleListFormat> myList;
     public List<recycleListFormat> myLoadedList;
@@ -73,7 +73,7 @@ public class recycleClicksHelper {
         dialog.setContentView(BtBinding.getRoot());
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(R.color.DeActive));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(R.color.DeActive)); // set background color out of dialog
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
 
@@ -117,6 +117,7 @@ public class recycleClicksHelper {
             alert.setView(ed);
             ed.requestFocus();
             alert.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+                @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     String parentFile = Objects.requireNonNull(file.getParentFile()).getAbsolutePath();
@@ -147,8 +148,9 @@ public class recycleClicksHelper {
                                 case statics.PDF_STATE:
                                     for (recycleListFormat format : getFiles.getPdfFiles()) {
                                         if (format.file.getAbsolutePath().equals(myList.get(position).file.getAbsolutePath())) {
+                                           int filePosition=getFiles.getPdfFiles().indexOf(format);
                                             getFiles.getPdfFiles().remove(format);
-                                            getFiles.getPdfFiles().add(form);
+                                            getFiles.getPdfFiles().add(filePosition,form);
                                             MainActivity.setGetFiles(getFiles);
                                             myList.remove(position);
                                             break;
@@ -160,9 +162,9 @@ public class recycleClicksHelper {
                                     for (recycleListFormat format : getFiles.getWordFiles()) {
 
                                         if (format.getFile().getAbsolutePath().equals(file.getAbsolutePath())) {
-
+                                            int filePosition=getFiles.getWordFiles().indexOf(format);
                                             getFiles.getWordFiles().remove(format);
-                                            getFiles.getWordFiles().add(form);
+                                            getFiles.getWordFiles().add(filePosition,form);
                                             MainActivity.setGetFiles(getFiles);
                                             myList.remove(position);
                                             break;
@@ -174,8 +176,9 @@ public class recycleClicksHelper {
                                 case statics.EXCEL_STATE:
                                     for (recycleListFormat format : getFiles.getExcelFiles()) {
                                         if (format.file.getAbsolutePath().equals(myList.get(position).file.getAbsolutePath())) {
+                                            int filePosition=getFiles.getExcelFiles().indexOf(format);
                                             getFiles.getExcelFiles().remove(format);
-                                            getFiles.getExcelFiles().add(form);
+                                            getFiles.getExcelFiles().add(filePosition,form);
                                             MainActivity.setGetFiles(getFiles);
                                             myList.remove(position);
 
